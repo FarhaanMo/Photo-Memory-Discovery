@@ -1,0 +1,307 @@
+Problem Statement: AI-Powered Google Photos Retrieval Discovery Engine
+
+Context
+
+Google Photos contains years of personal photos, videos, screenshots, documents and other visual memories.
+
+Users can often search effectively when they know exactly what they are looking for. However, retrieval becomes significantly harder when a user remembers that a particular photo exists but cannot precisely remember its date, location, album, exact text, object name or other searchable attributes.
+
+Examples:
+
+- “That small café we went to during our Goa trip.”
+- “The picture of the medicine I took when I was sick last year.”
+- “That screenshot I saved about a job but I don’t remember when.”
+- “A restaurant photo from a holiday where I remember what happened before it, but not the restaurant name.”
+
+The broader business goal is to increase the percentage of users who successfully retrieve a photo they remember but cannot precisely describe when they begin searching.
+
+This project is NOT intended to improve Google Photos search generally.
+
+The purpose of this application is to build an AI-powered discovery engine that analyses real public user conversations about photo retrieval and identifies why vaguely remembered photo retrieval fails.
+
+Research Question
+
+Why does retrieval fail when a Google Photos user remembers that a specific photo exists but cannot precisely describe when, where or what it was when they begin searching?
+
+Important Product Principle
+
+The discovery engine must NOT assume that a conversational photo assistant or progressive memory reconstruction is automatically the correct solution.
+
+It must analyse the evidence neutrally and allow the research to reveal which retrieval failure is most important.
+
+The engine should be capable of disproving the initial hypotheses.
+
+Dataset
+
+The application will analyse approximately 200–250 publicly available user conversations.
+
+Potential sources include:
+
+- Reddit
+- Google Photos Community / Support discussions
+- Google Play Store reviews
+- Apple App Store reviews
+- YouTube comments
+- Other relevant public forums
+
+The data may initially be supplied as a CSV file rather than automatically scraped within the application.
+
+Each original record should contain at minimum:
+
+- record_id
+- source
+- date
+- url
+- raw_text
+
+The application should preserve the original user text and source URL so that research findings can always be traced back to evidence.
+
+Research Scope
+
+Only conversations genuinely related to finding or retrieving an existing old photo/image should be treated as relevant.
+
+Examples of irrelevant Google Photos discussions include:
+
+- backup problems
+- syncing problems
+- storage limits
+- subscriptions
+- account access
+- crashes
+- editing features
+- upload problems
+- general complaints unrelated to retrieval
+
+AI Analysis
+
+For every relevant record, the AI should extract and classify:
+
+1. What kind of photo/image the user is trying to retrieve
+
+2. What the user remembers:
+- person / people
+- rough time
+- rough location
+- object
+- visible text
+- event / occasion
+- purpose for taking or saving the image
+- sequence of events before or after the image
+- association such as sending it to someone
+- visual characteristics such as indoor/outdoor, colour, lighting etc.
+
+3. What information the user has forgotten
+
+4. Search or retrieval strategy attempted
+
+5. Primary failure stage
+
+Failure stages:
+
+EXPRESSION FAILURE
+The user remembers something about the photo but struggles to convert that memory into useful searchable words or attributes.
+
+RETRIEVAL / INTERPRETATION FAILURE
+The user provides reasonable clues but the expected or relevant photo does not appear.
+
+EVALUATION FAILURE
+Potentially relevant results appear but the user struggles to identify the correct photo among many similar candidates.
+
+RECOVERY / REFINEMENT FAILURE
+The first attempt fails and the user does not know how to refine the search or make progress.
+
+OTHER / UNCLEAR
+There is not enough information to confidently identify the failure stage.
+
+6. Whether the user attempted to refine the search
+
+7. Workaround used, for example:
+- manual timeline scrolling
+- albums
+- People & Pets
+- Places / Maps
+- another application
+- asking another person
+- giving up
+
+8. Retrieval outcome
+
+9. Primary problem theme
+
+10. Evidence strength
+
+AI Safety / Research Accuracy Requirements
+
+The LLM must not invent information.
+
+If something is not explicitly present in the user conversation, return unknown / unclear rather than guessing.
+
+All AI-generated classifications must remain connected to the original record_id and source text.
+
+The system must allow users to inspect the underlying evidence behind any insight.
+
+Application Objective
+
+Build a lightweight AI-powered research application called:
+
+Google Photos Retrieval Discovery Engine
+
+The application should help a Product Manager understand:
+
+- What types of old images users struggle to retrieve
+- What users remember about those images
+- What users have forgotten
+- How users initially attempt retrieval
+- Where retrieval journeys fail
+- What users do after a failed search
+- Which failure stages occur most frequently
+- Which remembered clues are associated with different failure types
+- Which retrieval problems appear repeatedly across different public sources
+
+Core Application Features
+
+1. Dataset Overview
+
+Display:
+
+- total records
+- relevant retrieval records
+- irrelevant records
+- source distribution
+- failure-stage distribution
+- common remembered clues
+- common workarounds
+- retrieval outcomes
+
+2. Retrieval Problem Map
+
+Allow comparison of:
+
+- Expression Failure
+- Retrieval / Interpretation Failure
+- Evaluation Failure
+- Recovery / Refinement Failure
+
+Show counts and percentages based only on analysed records.
+
+3. Memory Clue Analysis
+
+Show which information users commonly remember:
+
+- people
+- time
+- place
+- object
+- text
+- event
+- purpose
+- sequence
+- association
+- visual characteristics
+
+Also show what information users commonly forget.
+
+4. Evidence Explorer
+
+Allow the researcher to filter records by:
+
+- source
+- failure stage
+- photo type
+- remembered clue
+- outcome
+- problem theme
+
+Each result must display:
+
+- record ID
+- source
+- original user text
+- classifications
+- source URL
+
+5. Ask the Research
+
+Provide a question box where the researcher can ask questions such as:
+
+- “What do users remember when they cannot remember the date?”
+- “What happens after the first search attempt fails?”
+- “Which retrieval problems occur most often with screenshots?”
+- “Compare expression failure and recovery failure.”
+
+The answer must be grounded ONLY in the records in the dataset.
+
+The response should cite supporting record IDs.
+
+The system should say when there is insufficient evidence instead of generating unsupported conclusions.
+
+Technical Requirements
+
+Keep the architecture intentionally simple.
+
+Recommended stack:
+
+- Python
+- Streamlit
+- Pandas
+- Groq API for LLM classification and grounded analysis
+- CSV for storage
+- Plotly or native Streamlit charts
+- Optional lightweight semantic retrieval using embeddings if needed
+
+Do NOT introduce unnecessary technologies such as:
+
+- complex databases
+- authentication
+- microservices
+- Docker
+- n8n
+- Zapier
+- large multi-agent architectures
+
+unless absolutely necessary.
+
+The goal is a functional research MVP that can be completed quickly and demonstrated publicly.
+
+Dataset Size
+
+Target approximately 200–250 public conversations.
+
+During development, the application must also work correctly with a small test dataset of 10–20 records.
+
+Research Integrity
+
+The application must clearly distinguish:
+
+- raw evidence
+- AI classification
+- calculated statistics
+- AI-generated synthesis
+
+Percentages must be calculated programmatically from the classified dataset rather than generated by the LLM.
+
+All insights should be traceable to supporting records.
+
+Expected Product Outcome
+
+The tool should help the Product Manager identify which specific part of the vague-photo retrieval journey represents the strongest opportunity.
+
+The engine itself should NOT choose the final product solution.
+
+Its purpose is discovery and evidence generation.
+
+User Experience
+
+The interface should be professional, minimal and suitable for showing inside a Product Management graduation project.
+
+Avoid excessive animation.
+
+Prioritize:
+
+- clear data
+- readable charts
+- evidence
+- simple filters
+- strong information hierarchy
+
+The final application must be deployable publicly using Streamlit Community Cloud.
